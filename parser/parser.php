@@ -28,7 +28,7 @@ mysql_select_db($old_base['name']);
 	//echo '<br>Количество символов<br>'.$strLength.'<br><br>';
 	$idtxt = substr($arr[$i], -7, 6);
 	//echo '<br>проверка ID<br>'.$idtxt.'<br><br>';
-	$content = mysql_query('SELECT ID FROM `wp_posts` WHERE  ID='.$idtxt.';');
+	$content = mysql_query('SELECT page_id FROM `mso_page` WHERE  page_id='.$idtxt.';');
 	$num_rows = mysql_num_rows($content);
 	echo $num_rows;
 	if ($num_rows<1)
@@ -68,11 +68,14 @@ mysql_select_db($old_base['name']);
 			//echo '<br>URL<br>'.$arr[$i].'<br>';
 			
 			//echo '<br><br><br>'; 
-			$html_format = mysql_escape_string($html_format);
-			$name = mysql_escape_string($name);
+			$html_format = mysql_real_escape_string($html_format);
+			$start = '<span class="post_title">';
+			$end = '</span>';
+			$name = substr($name, strlen($start)+strpos($name, $start), (strlen($name) - strpos($name, $end))*(-1));
+			$name = mysql_real_escape_string($name);
 			
 			
-			$result = mysql_query('INSERT INTO wp_posts (ID,post_date,post_content,post_title,post_author) VALUES('.$idtxt.',now(),"'.$html_format.'","'.$name.'",1);')
+			$result = mysql_query('INSERT INTO mso_page (page_id,page_slug,page_date_publish,page_content,page_title,page_id_autor) VALUES('.$idtxt.','.$idtxt.',now(),"'.$html_format.'","'.$name.'",1);')
 			or die("Invalid query: " . mysql_error());
 			echo '<br><br><br>';
 			//echo 'INSERT INTO wp_posts (ID,post_date,post_content,post_title,post_author) VALUES('.$idtxt.',now(),"'.$html_format.'","'.$name.'",1);';
