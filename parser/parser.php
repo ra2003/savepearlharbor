@@ -43,12 +43,14 @@ mysql_select_db($old_base['name']);
 			//echo '<br>Дата<br>'.$data.'<br>' ;
 			
 			foreach($html->find('.post_title') as $name)
+			$name = $name->innertext;
 			//echo '<br>Навание<br>'.$name.'<br>'; 
 			
 			foreach($html->find('div.hubs') as $hubs) 
 			//echo '<br>Хабы<br>'.$hubs->plaintext.'<br>' ;
 			
 			foreach($html->find('div[class=content html_format]') as $html_format) 
+			$name = $name->innertext;
 			//echo '<br>Текс<br>'.$html.'<br>' ;
 			
 			
@@ -68,18 +70,11 @@ mysql_select_db($old_base['name']);
 			//echo '<br>URL<br>'.$arr[$i].'<br>';
 			
 			//echo '<br><br><br>'; 
-			$start = '<div class="content html_format"> ';
-			$end1 = '</div>';
-			$html_format = substr($html_format, strlen($start)+strpos($html_format, $start), (strlen($html_format) - strpos($html_format, $end1))*(-1));
 			$html_format = mysql_real_escape_string($html_format);
-			
-			$start = '<span class="post_title">';
-			$end = '</span>';
-			$name = substr($name, strlen($start)+strpos($name, $start), (strlen($name) - strpos($name, $end))*(-1));
 			$name = mysql_real_escape_string($name);
 			
 			
-			$result = mysql_query('INSERT INTO mso_page (page_id,page_slug,page_date_publish,page_content,page_title,page_id_autor) VALUES('.$idtxt.','.$idtxt.',now(),"'.$html_format. $end1 .'","'.$name.'",1);')
+			$result = mysql_query('INSERT INTO mso_page (page_id,page_slug,page_date_publish,page_content,page_title,page_id_autor) VALUES('.$idtxt.','.$idtxt.',now(),"'.$html_format.'","'.$name.'",1);')
 			or die("Invalid query: " . mysql_error());
 			echo '<br><br><br>';
 			//echo 'INSERT INTO wp_posts (ID,post_date,post_content,post_title,post_author) VALUES('.$idtxt.',now(),"'.$html_format.'","'.$name.'",1);';
